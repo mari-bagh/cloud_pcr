@@ -1,6 +1,6 @@
 ## Setup:
 * Install [Node](http://nodejs.org) (v10.x.x or above)
-* `git clone https://`
+* `git clone https://github.com/davit-gh/cloud_pcr.git`
 * `npm i` to install the project dependencies
 
 ## Run tests:
