@@ -1,39 +1,46 @@
 version: 2
-
 jobs:
-  build:
+  prepare:
+    working_directory: ~/foo
     docker:
-      # the Docker image with Cypress dependencies
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    working_directory: ~/app
-    parallelism: 1
+      - image: circleci/node:~~~~~~~~~~
+    environment:
+      NPM_VERSION: "5.7.0"
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - v2-deps-{{ .Branch }}-
-            - v2-deps-
-      - run: npm ci
-      - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+          name: Restore node modules cache
+          key: node_modules-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: |
+            if [ ! -d node_modules ]; then
+              sudo npm install -g npm@$NPM_VERSION
+              npm ci
+            fi
+      - save_cache:name: Save node modules cache
+          key: node_modules-{{ checksum "package-lock.json" }}
           paths:
-            - ~/.npm
-            - ~/.cache
-      - run:
-          name: Running E2E tests with JUnit reporter
-          command: npm run test-junit
-      - store_test_results:
-          path: junit-results
-      - run:
-          name: Running E2E tests with multiple reporters
-          command: npm run test-multiple
-      - store_test_results:
-          path: multiple-results
-      - store_artifacts:
-          path: cypress/videos
-      - store_artifacts:
-          path: cypress/screenshots
+            - node_modules
+
+          build:
+            working_directory: ~/foo
+            docker:
+              - image: circleci/node:~~~~~~~~~~
+            steps:
+              - checkout
+              - restore_cache:
+                  name: Restore node modules cache
+                  key: node_modules-{{ checksum "package-lock.json" }}
+              - run:
+                  name: build
+                  command: npm run build
+
+          workflows:
+            version: 2
+            deploy:
+              jobs:
+                - prepare
+                    - build:
+                    requires:
+                      - prepare
