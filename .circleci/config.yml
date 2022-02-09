@@ -1,12 +1,5 @@
 version: 2.1
 orbs:
-<<<<<<< HEAD
-  cypress: cypress-io/cypress@1
-workflows:
-  build:
-    jobs:
-      - cypress/run
-=======
   cypress: cypress-io/cypress@1.27.0
 
 executors:
@@ -32,9 +25,9 @@ workflows:
             branches:
               only:
                 - master1
-#          group: 2x-chrome
-#          parallel: true
-#          parallelism: 2
+  #          group: 2x-chrome
+  #          parallel: true
+  #          parallelism: 2
 
   periodical:
     triggers:
@@ -55,4 +48,3 @@ workflows:
           executor: chrome-firefox-executor
           browser: chrome
 #          spec: cypress/integration/cloudPCR_tests/institutionLRAPHistory.feature
->>>>>>> origin/main
