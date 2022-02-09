@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "postinstall": "^0.7.4"
+  },
   "devDependencies": {
     "cypress": "^6.2.0",
     "cypress-cucumber-preprocessor": "^4.0.0",
