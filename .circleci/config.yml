@@ -1,0 +1,50 @@
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.27.0
+
+executors:
+  edge-executor:
+    docker:
+      - image: cypress/browsers:node12.18.4-edge88
+  chrome-firefox-executor:
+    docker:
+      - image: cypress/browsers:node14.16.0-chrome89-ff86
+workflows:
+  build:
+    jobs:
+      - cypress/install
+      - cypress/run:
+          name: Chrome run
+          requires:
+            - cypress/install
+          record: true
+          tags: 'chrome'
+          executor: chrome-firefox-executor
+          browser: chrome
+          filters:
+            branches:
+              only:
+                - master1
+#          group: 2x-chrome
+#          parallel: true
+#          parallelism: 2
+
+  periodical:
+    triggers:
+      - schedule:
+          cron: "0,31 * * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - cypress/install
+      - cypress/run:
+          name: Chrome run periodical
+          requires:
+            - cypress/install
+          record: true
+          tags: 'chrome,periodical'
+          executor: chrome-firefox-executor
+          browser: chrome
+#          spec: cypress/integration/cloudPCR_tests/institutionLRAPHistory.feature
