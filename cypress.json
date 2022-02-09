@@ -2,5 +2,6 @@
   "baseUrl": "https://cloudpcrv3.azurewebsites.net",
   "testFiles": "**/*.feature",
   "defaultCommandTimeout": 16000,
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "projectId": "3bwrb2"
 }
