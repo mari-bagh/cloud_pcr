@@ -30,7 +30,6 @@ Given(/^I am logged in CloudPCR page$/, function () {
     cy.wait(12000)
     PCRPage.clickOnButton(continue_button);
 });
-
 And(/^Assert that CloudPCR page is opened$/, function () {
     openedCloudPCRPage.expect().toShowOpenedPage()
     PCRPage.waitForMyPcrsPage()
