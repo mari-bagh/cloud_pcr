@@ -27,6 +27,7 @@ Given(/^I am logged in CloudPCR page$/, function () {
     PCRPage.fillInField(email_field, 'tolihex968@cctyoo.com')
     PCRPage.fillInField(password_field, 'ilovecloudpcr!')
     PCRPage.clickOnButton(login_filed)
+
     // cy.reload()
     // cy.wait(120000)
     // cy.reload()
