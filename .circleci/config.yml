@@ -60,7 +60,7 @@ workflows:
           name: Chrome run
           requires:
             - cypress/install
-          record: true
+          record: false
           tags: 'chrome'
           executor: chrome-firefox-executor
           browser: chrome
