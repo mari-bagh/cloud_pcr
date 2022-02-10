@@ -53,6 +53,7 @@ class PCRPage {
         })
     }
 
+
     static fillOutTimesFields() {
         cy.get('[class="input-group-addon"] i').each(($el) => {
             if ($el.is(':visible')) {
