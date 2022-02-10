@@ -22,6 +22,7 @@ Given(/^I am in CloudPCR login page$/, () => {
     cy.intercept('POST','/api/services/app/install/GetIntegrations').as('continue')
 });
 
+
 Given(/^I am logged in CloudPCR page$/, function () {
     PCRPage.fillInField(email_field, 'tolihex968@cctyoo.com')
     PCRPage.fillInField(password_field, 'ilovecloudpcr!')
