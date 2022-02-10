@@ -3,10 +3,15 @@ jobs:
   build:
     docker:
       - image: cypress/base:14.16.0
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
     working_directory: ~/app
+    periodical:
+      triggers:
+        - schedule:
+            cron: "0,31 * * * *"
+            filters:
+              branches:
+                only:
+                  - main
     steps:
       - checkout
       - restore_cache:
