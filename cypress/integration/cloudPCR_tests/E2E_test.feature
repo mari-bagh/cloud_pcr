@@ -6,7 +6,7 @@ Feature: CloudPCR
   @e2e-test @Scenario1
   Scenario: Should test CloudPCR page
     Given I am logged in CloudPCR page
-    And Assert that CloudPCR page is opened
+#    And Assert that CloudPCR page is opened
 #    And I click on "Create new PCR" button
 #    And I fill out all required fields
 #    And I click the red “ ! “ icon at the top
