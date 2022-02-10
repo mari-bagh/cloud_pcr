@@ -1,39 +1,91 @@
-version: 2
+#version: 2
+#
+#jobs:
+#  build:
+#    docker:
+#      # the Docker image with Cypress dependencies
+#      - image: cypress/base:8
+#        environment:
+#          ## this enables colors in the output
+#          TERM: xterm
+#    working_directory: ~/app
+#    parallelism: 1
+#    steps:
+#      - checkout
+#      - restore_cache:
+#          keys:
+#            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+#            - v2-deps-{{ .Branch }}-
+#            - v2-deps-
+#      - run: npm ci
+#      - save_cache:
+#          key: v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
+#          paths:
+#            - ~/.npm
+#            - ~/.cache
+#      - run:
+#          name: Running E2E tests with JUnit reporter
+#          command: npm run test-junit
+#      - store_test_results:
+#          path: junit-results
+#      - run:
+#          name: Running E2E tests with multiple reporters
+#          command: npm run test-multiple
+#      - store_test_results:
+#          path: multiple-results
+#      - store_artifacts:
+#          path: cypress/videos
+#      - store_artifacts:
+#          path: cypress/screenshots
 
-jobs:
-  build:
+
+version: 2.1
+orbs:
+  cypress: cypress-io/cypress@1.27.0
+
+executors:
+  edge-executor:
     docker:
-      # the Docker image with Cypress dependencies
-      - image: cypress/base:8
-        environment:
-          ## this enables colors in the output
-          TERM: xterm
-    working_directory: ~/app
-    parallelism: 1
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            - v2-deps-{{ .Branch }}-
-            - v2-deps-
-      - run: npm ci
-      - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "package-lock.json" }}
-          paths:
-            - ~/.npm
-            - ~/.cache
-      - run:
-          name: Running E2E tests with JUnit reporter
-          command: npm run test-junit
-      - store_test_results:
-          path: junit-results
-      - run:
-          name: Running E2E tests with multiple reporters
-          command: npm run test-multiple
-      - store_test_results:
-          path: multiple-results
-      - store_artifacts:
-          path: cypress/videos
-      - store_artifacts:
-          path: cypress/screenshots
+      - image: cypress/browsers:node12.18.4-edge88
+  chrome-firefox-executor:
+    docker:
+      - image: cypress/browsers:node14.16.0-chrome89-ff86
+workflows:
+  build:
+    jobs:
+      - cypress/install
+      - cypress/run:
+          name: Chrome run
+          requires:
+            - cypress/install
+          record: true
+          tags: 'chrome'
+          executor: chrome-firefox-executor
+          browser: chrome
+          filters:
+            branches:
+              only:
+                - master1
+  #          group: 2x-chrome
+  #          parallel: true
+  #          parallelism: 2
+
+  periodical:
+    triggers:
+      - schedule:
+          cron: "0,31 * * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - cypress/install
+      - cypress/run:
+          name: Chrome run periodical
+          requires:
+            - cypress/install
+          record: true
+          tags: 'chrome,periodical'
+          executor: chrome-firefox-executor
+          browser: chrome
+#          spec: cypress/integration/cloudPCR_tests/institutionLRAPHistory.feature
