@@ -13,14 +13,7 @@ jobs:
                 only:
                   - main
     steps:
-      - checkout
       - run:
           name: Install Dependencies
           command: npm ci
-      - save_cache:
-          key: v1-deps-{{ .Branch }}-{{ checksum "package.json" }}
-          # cache NPM modules and the folder with the Cypress binary
-          paths:
-            - ~/.npm
-            - ~/.cache
       - run: $(npm bin)/cypress run --record --key 2e49e6b5-c595-4b08-8024-5fd03119f596
